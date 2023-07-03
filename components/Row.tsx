@@ -9,25 +9,29 @@ interface Props {
 }
 
 function Row({ title, movies }: Props) {
-
-  const rowRef = useRef<HTMLDivElement>(null)
-  const [isMoved, setIsMoved] = useState(false)
+  const rowRef = useRef<HTMLDivElement>(null);
+  const [isMoved, setIsMoved] = useState(false);
 
   const handleClick = (direction: string) => {
-    setIsMoved(true)
+    setIsMoved(true);
 
     if (rowRef.current) {
-      const {scrollLeft, clientWidth} = rowRef.current
+      const { scrollLeft, clientWidth } = rowRef.current;
 
       const scrollTo =
-      direction === 'left'
-      ? scrollLeft - clientWidth : scrollLeft + clientWidth
+        direction === "left"
+          ? scrollLeft - clientWidth
+          : scrollLeft + clientWidth;
+
+      rowRef.current.scrollTo({ left: scrollTo, behavior: "smooth" });
     }
-  }
+  };
 
   return (
     <div className="h-40 space-y-0.5 md:space-y-2">
-      <h2 className="w-56 cursor-pointer text-sm font-semibold text-[#e5e5e5] transition duration-200 hover:text-white md:text-2xl">{title}</h2>
+      <h2 className="w-56 cursor-pointer text-sm font-semibold text-[#e5e5e5] transition duration-200 hover:text-white md:text-2xl">
+        {title}
+      </h2>
       <div className="group relative md:-ml-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -35,7 +39,9 @@ function Row({ title, movies }: Props) {
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="absolute opacity-0 top-0 bottom-0 left-2 z-40 m-auto h-9 w-9 cursor-pointer transition hover:scale-125 group-hover:opacity-100"
+          className={`absolute opacity-0 top-0 bottom-0 left-2 z-40 m-auto
+          h-9 w-9 cursor-pointer transition hover:scale-125 group-hover:opacity-100
+           ${!isMoved && "hidden"}`}
           onClick={() => handleClick("left")}
         >
           <path
@@ -45,12 +51,14 @@ function Row({ title, movies }: Props) {
           />
         </svg>
 
-        <div ref={rowRef} className="flex scrollbar-hide items-center space-x-0.5 
+        <div
+          ref={rowRef}
+          className="flex scrollbar-hide items-center space-x-0.5 
          overflow-x-scroll
-         md:space-x-2.5 md:p-2">
+         md:space-x-2.5 md:p-2"
+        >
           {movies.map((movie) => (
             <Thumbnail key={movie.id} movie={movie} />
-
           ))}
         </div>
 
@@ -60,7 +68,8 @@ function Row({ title, movies }: Props) {
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="absolute opacity-0 top-0 bottom-0 left-2 z-40 m-auto h-9 w-9 cursor-pointer transition hover:scale-125 group-hover:opacity-100"
+          className={`absolute opacity-0 top-0 bottom-0 right-2 z-40 m-auto
+          h-9 w-9 cursor-pointer transition hover:scale-125 group-hover:opacity-100`}
           onClick={() => handleClick("right")}
         >
           <path
